@@ -1,4 +1,4 @@
-import { ADDRCONFIG } from 'dns';
+
 
 /**
  * Copyright 2016, Google, Inc.
@@ -91,14 +91,16 @@ app.get('/', (req, res) => {
 
 // [START process]
 // Process the file upload and upload to Google Cloud Storage.
-app.post('/upload', multer.single('file'), (req, res, next) => { // I think use multer.array() for each function
-  if (!req.file) {
+//single('file')
+app.post('/upload', multer.any(), (req, res, next) => { // I think use multer.array() for each function
+  if (!req.files) {
     res.status(400).send('No file uploaded.');
     return;
   }
 
   // Create a new blob in the bucket and upload the file data.
-  const blob = bucket.file(req.file.originalname);
+  req.files.map(funtime => {
+    const blob = bucket.file(funtime.originalname);
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
@@ -106,12 +108,14 @@ app.post('/upload', multer.single('file'), (req, res, next) => { // I think use 
   });
 
   blobStream.on('finish', () => {
+    console.log("uploaded a file");
     // The public URL can be used to directly access the file via HTTP.
-    const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
-    res.status(200).send(publicUrl);
+    // const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
+    // res.status(200).send(publicUrl);
   });
-
-  blobStream.end(req.file.buffer);
+  blobStream.end(funtime.buffer);
+  });
+  res.status(200).send("all files uploaded!")
 });
 // [END process]
 

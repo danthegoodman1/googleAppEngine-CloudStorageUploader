@@ -92,12 +92,21 @@ app.get('/', (req, res) => {
 // [START process]
 // Process the file upload and upload to Google Cloud Storage.
 //single('file')
-app.post('/upload/:extension', multer.any(), (req, res, next) => { // I think use multer.array() for each function
+app.post('/upload/:extension/:clientsecret', multer.any(), (req, res, next) => { // I think use multer.array() for each function
   if (!req.files) {
     res.status(400).send('No file uploaded.');
     return;
   }
+  let clientsecret = req.params.clientsecret;
+  if(!clientsecret){
+    res.status(400).send('No clientsecret key/data pair. Make sure its: "clientsecret: [THE_CLIENT_SECRET]"');
+  }
+  if(clientsecret != "testsecret"){
+    res.status(400).send('Incorrect clientsecret key/data pair. Make sure its: "clientsecret: [THE_CLIENT_SECRET]"');
+  }
   let extension = req.params.extension;
+  console.log("THE REQ BODY IS: ");
+  console.log(req.body);
   console.log("THE EXTENSION IS: " + extension);
   console.log("THE BUCKET IS: " + process.env.GCLOUD_STORAGE_BUCKET);
   console.log("THE WHOLE THING IS: " + process.env.GCLOUD_STORAGE_BUCKET + `/${extension}`);

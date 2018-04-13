@@ -80,7 +80,9 @@ const multer = Multer({
     // But it did work without having to do custom credentials so I guess you could just not even deal with the stupid storage setting up oauth creds in the cloud console and just use that normal post request above to get new credentisl every so often
 
 
-
+let currentSecrets = {
+  'mallard': "2018mallarditslittt",
+};
 
 // [START form]
 // Display a form for uploading files.
@@ -97,14 +99,11 @@ app.post('/upload/:extension/:clientsecret', multer.any(), (req, res, next) => {
     res.status(400).send('No file uploaded.');
     return;
   }
+  let extension = req.params.extension;
   let clientsecret = req.params.clientsecret;
-  if(!clientsecret){
-    res.status(400).send('No clientsecret key/data pair. Make sure its: "clientsecret: [THE_CLIENT_SECRET]"');
-  }
-  if(clientsecret != "testsecret"){
+  if(clientsecret != currentSecrets[extension]){
     res.status(400).send('Incorrect clientsecret key/data pair. Make sure its: "clientsecret: [THE_CLIENT_SECRET]"');
   }
-  let extension = req.params.extension;
   console.log("THE REQ BODY IS: ");
   console.log(req.body);
   console.log("THE EXTENSION IS: " + extension);

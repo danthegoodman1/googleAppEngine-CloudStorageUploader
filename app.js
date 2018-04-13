@@ -121,7 +121,8 @@ app.post('/upload/:extension', multer.any(), (req, res, next) => { // I think us
   });
   blobStream.end(funtime.buffer);
   });
-  console.log(fileList);
+  console.log("HERE IS THE FILE LIST: ");
+  console.log(fileList); // For some reason this is empty
   res.status(200).send("Uploaded files!"); // send the list of files and their location
 });
 // [END process]

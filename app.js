@@ -116,7 +116,7 @@ app.post('/upload', multer.any(), (req, res, next) => { // I think use multer.ar
   });
   blobStream.end(funtime.buffer);
   });
-  res.status(200).setHeader('Content-Type', 'application/json').send(JSON.stringify(fileList)); // send the list of files and their location
+  res.status(200).setHeader('Content-Type', 'application/json').json(fileList); // send the list of files and their location
 });
 // [END process]
 

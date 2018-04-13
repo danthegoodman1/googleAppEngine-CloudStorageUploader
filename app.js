@@ -74,6 +74,11 @@ const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET); // add like /f
     //   "contentType": "text/plain"
     // }
 
+    // or maybe just a post request to: https://developers.google.com/oauthplayground/refreshAccessToken
+    // and json body of: {"token_uri":"https://www.googleapis.com/oauth2/v4/token","refresh_token":"[REFRESH_TOKEN]"}
+    // The above is without setting up credentials though, might be different with credentials, just do the refresh button while watching the network data in inspect in safari, it shows info
+    // But it did work without having to do custom credentials so I guess you could just not even deal with the stupid storage setting up oauth creds in the cloud console and just use that normal post request above to get new credentisl every so often
+
 
 
 

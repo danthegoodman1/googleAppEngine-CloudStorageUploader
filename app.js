@@ -97,7 +97,7 @@ app.post('/upload', multer.any(), (req, res, next) => { // I think use multer.ar
     res.status(400).send('No file uploaded.');
     return;
   }
-
+  let fileList = {};
   // Create a new blob in the bucket and upload the file data.
   req.files.map(funtime => {
     const blob = bucket.file(funtime.originalname);
@@ -109,13 +109,14 @@ app.post('/upload', multer.any(), (req, res, next) => { // I think use multer.ar
 
   blobStream.on('finish', () => {
     console.log("uploaded a file");
+    fileList[funtime.originalname] = `https://storage.googleapis.com/${bucket.name}/${funtime.originalname}`
     // The public URL can be used to directly access the file via HTTP.
     // const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
     // res.status(200).send(publicUrl);
   });
   blobStream.end(funtime.buffer);
   });
-  res.status(200).send("all files uploaded!")
+  res.status(200).setHeader('Content-Type', 'application/json').send(JSON.stringify(fileList)); // send the list of files and their location
 });
 // [END process]
 

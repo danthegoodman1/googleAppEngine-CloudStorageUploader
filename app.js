@@ -50,7 +50,7 @@ const multer = Multer({
 });
 
 // A bucket is a container for objects (files).
-const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET); // add like /foldername to get the folder in there too, maybe want to do this at post time
+// const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET); // add like /foldername to get the folder in there too, maybe want to do this at post time
 // [END config]
 
 
@@ -92,15 +92,20 @@ app.get('/', (req, res) => {
 // [START process]
 // Process the file upload and upload to Google Cloud Storage.
 //single('file')
-app.post('/upload', multer.any(), (req, res, next) => { // I think use multer.array() for each function
+app.post('/upload/:extension', multer.any(), (req, res, next) => { // I think use multer.array() for each function
   if (!req.files) {
     res.status(400).send('No file uploaded.');
     return;
   }
+  let extension = req.params.extension;
+  console.log("THE EXTENSION IS: " + extension);
+  console.log("THE BUCKET IS: " + process.env.GCLOUD_STORAGE_BUCKET);
+  console.log("THE WHOLE THING IS: " + process.env.GCLOUD_STORAGE_BUCKET + `/${extension}`);
+  const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
   let fileList = {};
   // Create a new blob in the bucket and upload the file data.
   req.files.map(funtime => {
-    const blob = bucket.file(funtime.originalname);
+  const blob = bucket.file(`${extension}/${funtime.originalname}`); // PUT EXTENSION IN FILE NAME FEK
   const blobStream = blob.createWriteStream();
 
   blobStream.on('error', (err) => {
@@ -109,14 +114,15 @@ app.post('/upload', multer.any(), (req, res, next) => { // I think use multer.ar
 
   blobStream.on('finish', () => {
     console.log("uploaded a file");
-    fileList[funtime.originalname] = `https://storage.googleapis.com/${bucket.name}/${funtime.originalname}`
+    fileList[funtime.originalname] = `https://storage.googleapis.com/${bucket.name}/${extension}/${funtime.originalname}`;
     // The public URL can be used to directly access the file via HTTP.
     // const publicUrl = format(`https://storage.googleapis.com/${bucket.name}/${blob.name}`);
     // res.status(200).send(publicUrl);
   });
   blobStream.end(funtime.buffer);
   });
-  res.status(200).setHeader('Content-Type', 'application/json').json(fileList); // send the list of files and their location
+  console.log(fileList);
+  res.status(200).send("Uploaded files!"); // send the list of files and their location
 });
 // [END process]
 

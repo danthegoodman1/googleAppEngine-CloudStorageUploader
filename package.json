@@ -29,7 +29,7 @@
           "GCLOUD_STORAGE_BUCKET"
         ],
         "msg": "<input type=\"file\" name=\"file\">",
-        "substitutions": "storage.danthegoodman.com=$GCLOUD_STORAGE_BUCKET"
+        "substitutions": "storage.udelvip.com=$GCLOUD_STORAGE_BUCKET"
       },
       "build": {
         "requiredEnvVars": [

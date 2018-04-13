@@ -17,6 +17,6 @@ env: flex
 
 # [START env]
 env_variables:
-  GCLOUD_STORAGE_BUCKET: storage.danthegoodman.com #NAME OF THE BUCKET
+  GCLOUD_STORAGE_BUCKET: storage.udelvip.com #NAME OF THE BUCKET
 # [END env]
 # [END app_yaml]

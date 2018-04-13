@@ -1,3 +1,5 @@
+import { ADDRCONFIG } from 'dns';
+
 /**
  * Copyright 2016, Google, Inc.
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -48,8 +50,32 @@ const multer = Multer({
 });
 
 // A bucket is a container for objects (files).
-const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET);
+const bucket = storage.bucket(process.env.GCLOUD_STORAGE_BUCKET); // add like /foldername to get the folder in there too, maybe want to do this at post time
 // [END config]
+
+
+// SOME NOTES:
+// To change object metadata use: gsutil setmeta -h "[METADATA_KEY]:[METADATA_VALUE]" gs://[BUCKET_NAME]/[OBJECT_NAME]
+// like: gsutil setmeta -h "content-type:text/plain" gs://storage.danthegoodman.com/test.txt
+// and make sure who ever is doing that has been set to Storage Admin in the permissions even if you are the account owner
+// for using the restapi to change metadata use this: 
+// https://cloud.google.com/storage/docs/viewing-editing-metadata#storage-view-object-metadata-nodejs
+// Go to cloud console and make oauth client id credentials
+// https://developers.google.com/adwords/api/docs/guides/authentication#webapp
+// 
+
+    // curl -X PATCH --data-binary @config.json \
+    // -H "Authorization: Bearer [ACCESS TOKEN]" \
+    // -H "Content-Type: application/json" \
+    // "https://www.googleapis.com/storage/v1/b/[BUCKET]/o/[FILENAME]"
+
+    // with config.json:
+    // {
+    //   "contentType": "text/plain"
+    // }
+
+
+
 
 // [START form]
 // Display a form for uploading files.

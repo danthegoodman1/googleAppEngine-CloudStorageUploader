@@ -79,6 +79,9 @@ const multer = Multer({
     // The above is without setting up credentials though, might be different with credentials, just do the refresh button while watching the network data in inspect in safari, it shows info
     // But it did work without having to do custom credentials so I guess you could just not even deal with the stupid storage setting up oauth creds in the cloud console and just use that normal post request above to get new credentisl every so often
 
+    // Hit this from curl with:
+    // curl -i -X POST -H “Content-Type: multipart/form-data” -F “data=@[FILE_NAME]” [LINK]
+
 
 let currentSecrets = {
   'mallard': "2018mallarditslittt",

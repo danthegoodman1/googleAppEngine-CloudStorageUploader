@@ -81,6 +81,7 @@ const multer = Multer({
 
     // Hit this from curl with:
     // curl -i -X POST -H “Content-Type: multipart/form-data” -F “data=@[FILE_NAME]” [LINK]
+    // Can probably just hit with curl -F "data=@[FILE_NAME]" [LINK]
 
 
 let currentSecrets = {
